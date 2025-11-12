@@ -11,19 +11,19 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/boards")
-@Tag(name = "Board API", description = "Управление спортивными бордами")
+@Tag(name = "Board Controller", description = "Управление спортивными бордами")
 @RequiredArgsConstructor
 public class BoardController {
     private final BoardService boardService;
 
     @Operation(summary = "Получить все доступные борды")
-    @GetMapping("/available")
+    @GetMapping(value = "/available", produces = "application/json")
     public List<BoardDTO> getAvailableBoards() {
         return boardService.getAvailableBoards();
     }
 
     @Operation(summary = "Получить доступные борды по типу")
-    @GetMapping("/available/{type}")
+    @GetMapping(value = "/available/{type}", produces = "application/json")
     public List<BoardDTO> getAvailableBoardsByType(@PathVariable BoardType type) {
         return boardService.getAvailableBoardsByType(type);
     }

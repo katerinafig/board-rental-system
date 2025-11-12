@@ -13,11 +13,11 @@
   ],
   "tags": [
     {
-      "name": "Board API",
+      "name": "Board Controller",
       "description": "Управление спортивными бордами"
     },
     {
-      "name": "Rental API",
+      "name": "Rental Controller",
       "description": "Управление арендой бордов"
     }
   ],
@@ -25,7 +25,7 @@
     "/api/v1/rentals": {
       "get": {
         "tags": [
-          "Rental API"
+          "Rental Controller"
         ],
         "summary": "Получить активные аренды",
         "operationId": "getActiveRentals",
@@ -33,7 +33,7 @@
           "200": {
             "description": "OK",
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
@@ -47,7 +47,7 @@
       },
       "post": {
         "tags": [
-          "Rental API"
+          "Rental Controller"
         ],
         "summary": "Создать новую аренду",
         "operationId": "createRental",
@@ -63,7 +63,15 @@
         },
         "responses": {
           "201": {
-            "description": "Created",
+            "description": "Аренда успешно создана",
+            "content": {
+              "application/json": {
+
+              }
+            }
+          },
+          "400": {
+            "description": "Некорректный запрос",
             "content": {
               "*/*": {
                 "schema": {
@@ -78,7 +86,7 @@
     "/api/v1/rentals/{rentalId}/return": {
       "post": {
         "tags": [
-          "Rental API"
+          "Rental Controller"
         ],
         "summary": "Вернуть борд",
         "operationId": "returnBoard",
@@ -103,7 +111,7 @@
     "/api/v1/boards/available": {
       "get": {
         "tags": [
-          "Board API"
+          "Board Controller"
         ],
         "summary": "Получить все доступные борды",
         "operationId": "getAvailableBoards",
@@ -111,7 +119,7 @@
           "200": {
             "description": "OK",
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
@@ -127,7 +135,7 @@
     "/api/v1/boards/available/{type}": {
       "get": {
         "tags": [
-          "Board API"
+          "Board Controller"
         ],
         "summary": "Получить доступные борды по типу",
         "operationId": "getAvailableBoardsByType",
@@ -151,7 +159,7 @@
           "200": {
             "description": "OK",
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
