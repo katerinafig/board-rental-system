@@ -7,29 +7,29 @@ servers:
   - url: http://localhost:8080
     description: ""
 tags:
-  - name: Board API
+  - name: Board Controller
     description: Управление спортивными бордами
-  - name: Rental API
+  - name: Rental Controller
     description: Управление арендой бордов
 paths:
   /api/v1/rentals:
     get:
       tags:
-        - Rental API
+        - Rental Controller
       summary: Получить активные аренды
       operationId: getActiveRentals
       responses:
         "200":
           description: OK
           content:
-            '*/*':
+            'application/json':
               schema:
                 type: array
                 items:
                   $ref: "#/components/schemas/RentalResponseDTO"
     post:
       tags:
-        - Rental API
+        - Rental Controller
       summary: Создать новую аренду
       operationId: createRental
       requestBody:
@@ -42,13 +42,13 @@ paths:
         "201":
           description: Created
           content:
-            '*/*':
+            'application/json':
               schema:
                 $ref: "#/components/schemas/RentalResponseDTO"
   /api/v1/rentals/{rentalId}/return:
     post:
       tags:
-        - Rental API
+        - Rental Controller
       summary: Вернуть борд
       operationId: returnBoard
       parameters:
@@ -64,14 +64,14 @@ paths:
   /api/v1/boards/available:
     get:
       tags:
-        - Board API
+        - Board Controller
       summary: Получить все доступные борды
       operationId: getAvailableBoards
       responses:
         "200":
           description: OK
           content:
-            '*/*':
+            'application/json':
               schema:
                 type: array
                 items:
@@ -79,7 +79,7 @@ paths:
   /api/v1/boards/available/{type}:
     get:
       tags:
-        - Board API
+        - Board Controller
       summary: Получить доступные борды по типу
       operationId: getAvailableBoardsByType
       parameters:
@@ -97,7 +97,7 @@ paths:
         "200":
           description: OK
           content:
-            '*/*':
+            'application/json':
               schema:
                 type: array
                 items:

@@ -21,13 +21,13 @@ public class RentalService {
 
     @Transactional
     public RentalResponseDTO createRental(RentalRequestDTO requestDTO) {
-        BoardEntity board = boardService.getBoardById(requestDTO.boardId());
+        BoardEntity board = boardService.getBoardById(requestDTO.getBoardId());
 
         if (!board.getIsAvailable()) {
             throw new RuntimeException("Борд уже арендован");
         }
 
-        Double totalPrice = board.getPricePerHour() * requestDTO.rentalHours();
+        Double totalPrice = board.getPricePerHour() * requestDTO.getRentalHours();
 
         // Создание аренды
         RentalEntity rental = rentalMapper.toEntity(requestDTO);

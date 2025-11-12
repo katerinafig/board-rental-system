@@ -3,37 +3,28 @@ package com.example.boardrental.controllers;
 import com.example.boardrental.models.RentalRequestDTO;
 import com.example.boardrental.models.RentalResponseDTO;
 import com.example.boardrental.services.RentalService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
+
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/rentals")
-@Tag(name = "Rental API", description = "Управление арендой бордов")
 @RequiredArgsConstructor
-public class RentalController {
+public class RentalController implements RentalControllerApi {
     private final RentalService rentalService;
 
-    @Operation(summary = "Создать новую аренду")
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public RentalResponseDTO createRental(@Valid @RequestBody RentalRequestDTO requestDTO) {
-        return rentalService.createRental(requestDTO);
+    public ResponseEntity<RentalResponseDTO> createRental(@Valid RentalRequestDTO requestDTO) {
+        return ResponseEntity.ok(rentalService.createRental(requestDTO));
     }
 
-    @Operation(summary = "Получить активные аренды")
-    @GetMapping
-    public List<RentalResponseDTO> getActiveRentals() {
-        return rentalService.getActiveRentals();
+    public ResponseEntity<List<RentalResponseDTO>> getActiveRentals() {
+        return ResponseEntity.ok(rentalService.getActiveRentals());
     }
 
-    @Operation(summary = "Вернуть борд")
-    @PostMapping("/{rentalId}/return")
-    public void returnBoard(@PathVariable Long rentalId) {
+    public ResponseEntity<Void> returnBoard(Long rentalId) {
         rentalService.returnBoard(rentalId);
+        return ResponseEntity.ok().build();
     }
 }

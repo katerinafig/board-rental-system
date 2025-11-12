@@ -52,6 +52,15 @@
             <artifactId>mapstruct</artifactId>
             <version>${mapstruct.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -86,6 +95,70 @@
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
+                    <execution>
+                        <id>regex-path-property</id>
+                        <goals>
+                            <goal>regex-property</goal>
+                        </goals>
+                        <phase>validate</phase>
+                        <configuration>
+                            <name>fix.project.basedir</name>
+                            <value>${project.basedir}</value>
+                            <regex>\\</regex>
+                            <replacement>/</replacement>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>regex-path-property-build</id>
+                        <goals>
+                            <goal>regex-property</goal>
+                        </goals>
+                        <phase>validate</phase>
+                        <configuration>
+                            <name>fix.project.build.directory</name>
+                            <value>${project.build.directory}</value>
+                            <regex>\\</regex>
+                            <replacement>/</replacement>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>7.0.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${fix.project.basedir}/src/main/resources/static/api-docs.yaml</inputSpec>
+                            <generatorName>spring</generatorName>
+                            <output>${fix.project.build.directory}/generated-sources/openapi</output>
+                            <apiPackage>com.example.boardrental.controllers</apiPackage>
+                            <modelPackage>com.example.boardrental.models</modelPackage>
+                            <configOptions>
+                                <documentationProvider>none</documentationProvider>
+                                <interfaceOnly>true</interfaceOnly>
+                                <useResponseEntity>true</useResponseEntity>
+                                <openApiNullable>false</openApiNullable>
+                                <useSpringBoot3>true</useSpringBoot3>
+                                <generateConstructorWithAllArgs>true</generateConstructorWithAllArgs>
+                                <useTags>true</useTags>
+                                <useBeanValidation>true</useBeanValidation>
+                                <dateLibrary>java8-localdatetime</dateLibrary>
+                                <java8>true</java8>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

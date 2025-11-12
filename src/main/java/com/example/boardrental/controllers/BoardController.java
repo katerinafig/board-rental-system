@@ -3,28 +3,23 @@ package com.example.boardrental.controllers;
 import com.example.boardrental.enums.BoardType;
 import com.example.boardrental.models.BoardDTO;
 import com.example.boardrental.services.BoardService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/boards")
-@Tag(name = "Board API", description = "Управление спортивными бордами")
 @RequiredArgsConstructor
-public class BoardController {
+public class BoardController implements BoardControllerApi {
     private final BoardService boardService;
 
-    @Operation(summary = "Получить все доступные борды")
-    @GetMapping("/available")
-    public List<BoardDTO> getAvailableBoards() {
-        return boardService.getAvailableBoards();
+    public ResponseEntity<List<BoardDTO>> getAvailableBoards() {
+        return ResponseEntity.ok(boardService.getAvailableBoards());
     }
 
-    @Operation(summary = "Получить доступные борды по типу")
-    @GetMapping("/available/{type}")
-    public List<BoardDTO> getAvailableBoardsByType(@PathVariable BoardType type) {
-        return boardService.getAvailableBoardsByType(type);
+    public ResponseEntity<List<BoardDTO>> getAvailableBoardsByType(@PathVariable BoardType type) {
+        return ResponseEntity.ok(boardService.getAvailableBoardsByType(type));
     }
 }
