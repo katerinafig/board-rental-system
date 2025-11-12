@@ -4,9 +4,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.example</groupId>
-        <artifactId>board-rental-system</artifactId>
-        <version>1.0.0</version>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.4.3</version>
+        <relativePath/>
     </parent>
 
     <artifactId>generated-client</artifactId>
@@ -15,6 +16,100 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <mapstruct.version>1.5.5.Final</mapstruct.version>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${mapstruct.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
+                    <execution>
+                        <id>regex-path-property</id>
+                        <goals>
+                            <goal>regex-property</goal>
+                        </goals>
+                        <phase>validate</phase>
+                        <configuration>
+                            <name>fix.project.basedir</name>
+                            <value>${project.basedir}</value>
+                            <regex>\\</regex>
+                            <replacement>/</replacement>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>regex-path-property-build</id>
+                        <goals>
+                            <goal>regex-property</goal>
+                        </goals>
+                        <phase>validate</phase>
+                        <configuration>
+                            <name>fix.project.build.directory</name>
+                            <value>${project.build.directory}</value>
+                            <regex>\\</regex>
+                            <replacement>/</replacement>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>7.0.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${fix.project.basedir}/src/main/resources/api-docs.yaml</inputSpec>
+                            <generatorName>java</generatorName>
+                            <output>${fix.project.build.directory}/generated-sources/openapi</output>
+                            <ignoreFileOverride>${fix.project.basedir}/.openapi-generator-ignore</ignoreFileOverride>
+                            <apiPackage>com.example.boardrental.controllers</apiPackage>
+                            <modelPackage>com.example.boardrental.models</modelPackage>
+                            <configOptions>
+                                <library>resttemplate</library>
+                                <openApiNullable>false</openApiNullable>
+                                <generateConstructorWithAllArgs>true</generateConstructorWithAllArgs>
+                                <useJakartaEe>true</useJakartaEe>
+                                <generateClientAsBean>true</generateClientAsBean>
+                                <dateLibrary>java8-localdatetime</dateLibrary>
+                                <java8>true</java8>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

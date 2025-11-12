@@ -1,4 +1,5 @@
-const API_BASE = 'http://localhost:8080/api/v1';
+const API_BASE = 'http://localhost:8081/api/v1';
+console.log(API_BASE)
 let availableBoards = [];
 
 // Navigation
@@ -197,10 +198,8 @@ document.getElementById('rentalForm').addEventListener('submit', async (e) => {
             body: JSON.stringify(formData)
         });
 
-        const result = await response.json();
-
         if (response.ok) {
-            showToast(`Аренда успешно создана! Стоимость: ${result.totalPrice} ₽`, 'success');
+            showToast(`Аренда успешно создана!`, 'success');
             document.getElementById('rentalForm').reset();
             loadAvailableBoardsForRent();
             loadBoards();
