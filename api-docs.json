@@ -1,0 +1,310 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "API Аренда бордов",
+    "description": "API По аренде спортивных бордов",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": ""
+    }
+  ],
+  "tags": [
+    {
+      "name": "Board API",
+      "description": "Управление спортивными бордами"
+    },
+    {
+      "name": "Rental API",
+      "description": "Управление арендой бордов"
+    }
+  ],
+  "paths": {
+    "/api/v1/rentals": {
+      "get": {
+        "tags": [
+          "Rental API"
+        ],
+        "summary": "Получить активные аренды",
+        "operationId": "getActiveRentals",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RentalResponseDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Rental API"
+        ],
+        "summary": "Создать новую аренду",
+        "operationId": "createRental",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RentalRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/RentalResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/rentals/{rentalId}/return": {
+      "post": {
+        "tags": [
+          "Rental API"
+        ],
+        "summary": "Вернуть борд",
+        "operationId": "returnBoard",
+        "parameters": [
+          {
+            "name": "rentalId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/boards/available": {
+      "get": {
+        "tags": [
+          "Board API"
+        ],
+        "summary": "Получить все доступные борды",
+        "operationId": "getAvailableBoards",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BoardDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/boards/available/{type}": {
+      "get": {
+        "tags": [
+          "Board API"
+        ],
+        "summary": "Получить доступные борды по типу",
+        "operationId": "getAvailableBoardsByType",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "SKATEBOARD",
+                "LONGBOARD",
+                "SURFBOARD",
+                "SNOWBOARD"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BoardDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RentalRequestDTO": {
+        "type": "object",
+        "description": "Аренда борда",
+        "properties": {
+          "boardId": {
+            "type": "integer",
+            "format": "int64",
+            "description": "ID борда",
+            "example": 1
+          },
+          "customerName": {
+            "type": "string",
+            "description": "Имя клиента",
+            "example": "Иван Иванов"
+          },
+          "customerEmail": {
+            "type": "string",
+            "description": "Email клиента",
+            "example": "ivan@example.com"
+          },
+          "rentalHours": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Часы аренды",
+            "example": 3,
+            "minimum": 1
+          }
+        },
+        "required": [
+          "boardId",
+          "customerEmail",
+          "customerName",
+          "rentalHours"
+        ]
+      },
+      "BoardDTO": {
+        "type": "object",
+        "description": "Борд",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "ID борда",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "description": "Название борда",
+            "example": "Pro Skateboard X1"
+          },
+          "type": {
+            "type": "string",
+            "description": "Тип борда",
+            "enum": [
+              "SKATEBOARD",
+              "LONGBOARD",
+              "SURFBOARD",
+              "SNOWBOARD"
+            ],
+            "example": "SKATEBOARD"
+          },
+          "length": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Длина в см",
+            "example": 80
+          },
+          "condition": {
+            "type": "string",
+            "description": "Состояние борда",
+            "enum": [
+              "NEW",
+              "GOOD",
+              "USED"
+            ],
+            "example": "GOOD"
+          },
+          "pricePerHour": {
+            "type": "number",
+            "format": "double",
+            "description": "Цена аренды в час",
+            "example": 15.5
+          },
+          "isAvailable": {
+            "type": "boolean",
+            "description": "Доступен для аренды",
+            "example": true
+          }
+        }
+      },
+      "RentalResponseDTO": {
+        "type": "object",
+        "description": "Ответ с информацией об аренде",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "description": "ID аренды",
+            "example": 1
+          },
+          "board": {
+            "$ref": "#/components/schemas/BoardDTO",
+            "description": "Информация о борде"
+          },
+          "customerName": {
+            "type": "string",
+            "description": "Имя клиента",
+            "example": "Иван Иванов"
+          },
+          "customerEmail": {
+            "type": "string",
+            "description": "Email клиента",
+            "example": "ivan@example.com"
+          },
+          "rentalHours": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Часы аренды",
+            "example": 3
+          },
+          "totalPrice": {
+            "type": "number",
+            "format": "double",
+            "description": "Общая стоимость",
+            "example": 46.5
+          },
+          "rentalDate": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Дата аренды"
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "Аренда активна",
+            "example": true
+          }
+        }
+      }
+    }
+  }
+}

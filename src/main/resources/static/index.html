@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ru" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏄‍♂️ BoardRental - Прокат спортивных бордов</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="#">
+            <i class="bi bi-snowboard me-2"></i>
+            BoardRental
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#" onclick="showSection('boards')">
+                        <i class="bi bi-grid me-1"></i>Борды
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showSection('rent')">
+                        <i class="bi bi-cart-plus me-1"></i>Арендовать
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showSection('rentals')">
+                        <i class="bi bi-clock-history me-1"></i>Мои аренды
+                    </a>
+                </li>
+            </ul>
+            <div class="navbar-text">
+                <i class="bi bi-telephone me-1"></i>+7 (999) 123-45-67
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center min-vh-100">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold text-white mb-4">
+                    Аренда спортивных бордов
+                </h1>
+                <p class="lead text-white mb-4">
+                    Скейтборды, лонгборды, серфы и сноуборды для настоящих экстремалов.
+                    Качественное оборудование по доступным ценам.
+                </p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <button class="btn btn-light btn-lg" onclick="showSection('boards')">
+                        <i class="bi bi-search me-2"></i>Найти борд
+                    </button>
+                    <button class="btn btn-outline-light btn-lg" onclick="showSection('rent')">
+                        <i class="bi bi-lightning me-2"></i>Быстрая аренда
+                    </button>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <div class="hero-image">
+                    <i class="bi bi-snowboard"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Main Content -->
+<main class="container main-content py-5">
+    <!-- Boards Section -->
+    <section id="boards" class="content-section">
+        <div class="row mb-4">
+            <div class="col">
+                <h2 class="fw-bold">
+                    <i class="bi bi-grid-3x3-gap text-primary me-2"></i>
+                    Доступные борды
+                </h2>
+                <p class="text-muted">Выберите подходящий борд для вашего стиля</p>
+            </div>
+            <div class="col-auto">
+                <select id="boardTypeFilter" class="form-select" onchange="loadBoards()">
+                    <option value="">Все типы</option>
+                    <option value="SKATEBOARD">Скейтборды</option>
+                    <option value="LONGBOARD">Лонгборды</option>
+                    <option value="SURFBOARD">Серфборды</option>
+                    <option value="SNOWBOARD">Сноуборды</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="boardsList" class="row g-4">
+            <!-- Boards will be loaded here -->
+            <div class="col-12 text-center">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Загрузка...</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rent Section -->
+    <section id="rent" class="content-section" style="display: none;">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">
+                            <i class="bi bi-cart-plus me-2"></i>
+                            Оформление аренды
+                        </h4>
+                    </div>
+                    <div class="card-body p-4">
+                        <form id="rentalForm">
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold">Выберите борд</label>
+                                    <select id="boardSelect" class="form-select" required>
+                                        <option value="">-- Выберите борд --</option>
+                                    </select>
+                                    <div class="form-text">Доступны только свободные борды</div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Ваше имя</label>
+                                    <input type="text" id="customerName" class="form-control" placeholder="Иван Иванов" required>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Email</label>
+                                    <input type="email" id="customerEmail" class="form-control" placeholder="ivan@example.com" required>
+                                </div>
+
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold">Часы аренды</label>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <input type="range" id="rentalHoursRange" class="form-range" min="1" max="24" value="3"
+                                               oninput="document.getElementById('rentalHours').value = this.value">
+                                        <input type="number" id="rentalHours" class="form-control" style="width: 100px;"
+                                               min="1" max="24" value="3" required>
+                                        <span class="text-muted">часов</span>
+                                    </div>
+                                    <div class="form-text">Стоимость рассчитывается автоматически</div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="card bg-light">
+                                        <div class="card-body">
+                                            <h6 class="card-title">Расчет стоимости</h6>
+                                            <div class="d-flex justify-content-between">
+                                                <span>Цена за час:</span>
+                                                <span id="pricePreview">— ₽</span>
+                                            </div>
+                                            <div class="d-flex justify-content-between fw-bold fs-5 mt-2">
+                                                <span>Итого:</span>
+                                                <span id="totalPreview">— ₽</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary btn-lg w-100">
+                                        <i class="bi bi-check-circle me-2"></i>
+                                        Подтвердить аренду
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <div id="rentalResult" class="mt-4"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rentals Section -->
+    <section id="rentals" class="content-section" style="display: none;">
+        <div class="row mb-4">
+            <div class="col">
+                <h2 class="fw-bold">
+                    <i class="bi bi-clock-history text-primary me-2"></i>
+                    Активные аренды
+                </h2>
+                <p class="text-muted">Ваши текущие аренды и история</p>
+            </div>
+        </div>
+
+        <div id="rentalsList" class="row g-4">
+            <!-- Rentals will be loaded here -->
+            <div class="col-12 text-center">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Загрузка...</span>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Footer -->
+<footer class="bg-dark text-white py-5 mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 mb-4">
+                <h5 class="fw-bold">
+                    <i class="bi bi-snowboard me-2"></i>BoardRentalExample
+                </h5>
+                <p class="text-muted">Лучший выбор спортивных бордов для аренды. Качество, надежность, безопасность.</p>
+            </div>
+            <div class="col-lg-2 mb-4">
+                <h6 class="fw-semibold">Меню</h6>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="text-muted text-decoration-none" onclick="showSection('boards')">Борды</a></li>
+                    <li><a href="#" class="text-muted text-decoration-none" onclick="showSection('rent')">Аренда</a></li>
+                    <li><a href="#" class="text-muted text-decoration-none" onclick="showSection('rentals')">Мои аренды</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-3 mb-4">
+                <h6 class="fw-semibold">Контакты</h6>
+                <ul class="list-unstyled text-muted">
+                    <li><i class="bi bi-telephone me-2"></i>+7 (999) 123-45-67</li>
+                    <li><i class="bi bi-envelope me-2"></i>info@boardrental.example</li>
+                </ul>
+            </div>
+            <div class="col-lg-3 mb-4">
+                <h6 class="fw-semibold">Режим работы</h6>
+                <ul class="list-unstyled text-muted">
+                    <li>Пн-Пт: 9:00 - 22:00</li>
+                    <li>Сб-Вс: 10:00 - 20:00</li>
+                </ul>
+            </div>
+        </div>
+        <hr class="text-muted">
+        <div class="text-center text-muted">
+            <small>&copy; 2025 Пример для открытого урока по OpenAPI в Отус</small>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
